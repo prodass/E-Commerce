@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const promocionSchema = new mongoose.Schema({
-    id:{
+    _id: mongoose.Schema.Types.ObjectId,
+    codigo:{
         type: String,
         required: [true,"Please chech your data entry, no id especified!"]
     },
@@ -21,11 +22,11 @@ const promocionSchema = new mongoose.Schema({
     }],
     tipo:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "tipo"
+        ref: "tipos"
     },
     subTipo:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "subTipo"
+        ref: "subTipos"
     }
 });
 
