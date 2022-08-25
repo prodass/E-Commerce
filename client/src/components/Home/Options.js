@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 
-import Button from "./Button";
+import Button from "../Button";
+
 
 function Options(){
-
-    return  <div className="options">
+    let tipos = []
+    import("../../data/tipo").then((importedModule)=>{
+        tipos = importedModule.tipos;
+    });
+    console.log(tipos);
+    console.log("paso");
+    return  (<div className="options">
     <h3 className="sub-title">Seleccione la categoria deseada</h3>
     <div>
-        <Button text = "Descuentos"/>
-        <Button text = "NXM"/>
-        <Button text = "Bonos"/>
+        {tipos.map((element)=>{
+            return <Button key = {element.codigo} text = {element.descripcion}/>
+        })}
     </div>
-    </div>
+    </div>)
 }
 
 export default Options;

@@ -7,5 +7,23 @@ function getInicio(req,res){
     res.send("Hellow World!");
 }
 
+function getTipos(req,res){
+    Tipo.find((err,foundTipos)=>{
+        if(err){
+            res.status(500).json({message: err.message});
+        }
+        else{
+            if(foundTipos){
+                res.status(200).json(foundTipos);
+            }
+            else{
+                res.status(501).josn({message: "No existen tipos en la DB"});
+            }
+        }
+    })
+}
 
-export {getInicio}
+
+
+
+export {getInicio, getTipos}

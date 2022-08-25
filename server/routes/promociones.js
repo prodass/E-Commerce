@@ -4,8 +4,6 @@ import * as promocionesController from "../controllers/promociones.js";
 
 const router = express.Router();
 
-router.get("/", promocionesController.getInicio);
-
-
+router.get("/tipos", promocionesController.getTipos);
 
 export default router;
