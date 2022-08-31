@@ -1,7 +1,5 @@
 import { getTipos } from "../api";
 
-const tipos = [];
-
 class tipo{
     constructor(codigo,descripcion){
         this.codigo = codigo;
@@ -9,10 +7,15 @@ class tipo{
     }
 }
 
-getTipos().then((result)=>{
+const tipos = [new tipo(1,"prueba")];
+
+getTipos().then((result) => {
+    console.log(result);
     result.forEach(element => {
-        tipos.push(new tipo(element.codigo,element.descripcion));
+        tipos.push(new tipo(element.codigo, element.descripcion));
     });
 });
 
-export {tipos};
+export default tipos;
+
+

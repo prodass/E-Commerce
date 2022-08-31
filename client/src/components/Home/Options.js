@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Button from "../Button";
+import Button from "./Button";
 
+import { getTipos } from "../../api";
 
 function Options(){
-    let tipos = []
-    import("../../data/tipo").then((importedModule)=>{
-        tipos = importedModule.tipos;
+    const navigate = useNavigate();
+    const [tipos, setTipos] = useState([]);
+    getTipos().then(json =>{
+        setTipos(json);
     });
-    console.log(tipos);
-    console.log("paso");
+
+    function handleClick(text){
+        navigate("/" + text);
+    }
+
     return  (<div className="options">
     <h3 className="sub-title">Seleccione la categoria deseada</h3>
     <div>
         {tipos.map((element)=>{
-            return <Button key = {element.codigo} text = {element.descripcion}/>
+            return <Button key = {element.codigo} text = {element.descripcion} handleClick = {handleClick}/>
         })}
     </div>
     </div>)
