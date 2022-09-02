@@ -48,3 +48,7 @@
     margin: 5% 0;
     font-family: 'Inter', sans-serif;
 }
+.btn:hover{
+    background-color: #b2ccb5;
+    border-color: #8C938D;
+}

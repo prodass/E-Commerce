@@ -6,8 +6,14 @@ function getTipos(){
     });
 }
 
+function getProductos(){
+    return new Promise((resolve,reject)=>{
+        fetch(url + "productos").then((response) => response.json()).then((json)=>resolve(json));
+    })
+}
 
 
 
 
-export {getTipos};
+
+export {getTipos, getProductos};

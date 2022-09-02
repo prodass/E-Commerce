@@ -17,7 +17,23 @@ function getTipos(req,res){
                 res.status(200).json(foundTipos);
             }
             else{
-                res.status(501).josn({message: "No existen tipos en la DB"});
+                res.status(501).json({message: "No existen tipos en la DB"});
+            }
+        }
+    })
+}
+
+function getProductos(req,res){
+    Producto.find((err,foundProductos)=>{
+        if(err){
+            res.status(500).json({message: err.message});
+        }
+        else{
+            if(foundProductos){
+                res.status(500).json(foundProductos);
+            }
+            else{
+                res.status(501).json({message: "No existen productos en la DB"});
             }
         }
     })
@@ -25,5 +41,4 @@ function getTipos(req,res){
 
 
 
-
-export {getInicio, getTipos}
+export {getInicio, getTipos, getProductos}

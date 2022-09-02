@@ -8,9 +8,10 @@ import { getTipos } from "../../api";
 function Options(){
     const navigate = useNavigate();
     const [tipos, setTipos] = useState([]);
-    getTipos().then(json =>{
-        setTipos(json);
-    });
+    useEffect(()=>{
+        getTipos().then(json =>{setTipos(json);});
+    },[]);
+    
 
     function handleClick(text){
         navigate("/" + text);
