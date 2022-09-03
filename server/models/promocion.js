@@ -20,13 +20,23 @@ const promocionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "productos"
     }],
+    valor:{
+        type:String,
+        required:[true,"Please chech your data entry, no valor especified!"]
+    },
+    descuento:{
+        type:Number,
+        required:[true,"Please chech your data entry, no descuento especified!"],
+        min: 0,
+        max: 1
+    },
     tipo:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "tipos"
     },
-    subTipo:{
+    condicion:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "subTipos"
+        ref: "condicion"
     }
 });
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import PopUp from "../PopUp";
-import NuevaPromocion from "./NuevaPromocion";
+import NuevaPromocion from "../NuevaPromocion";
 
 function Descuento(){
     const [estado, setEstado] = useState(0)

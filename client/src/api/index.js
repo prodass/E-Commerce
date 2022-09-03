@@ -6,14 +6,20 @@ function getTipos(){
     });
 }
 
+function getCondiones(){
+    return new Promise((resolve,reject)=>{
+        fetch(url + "condiciones").then((response) => response.json()).then((json)=>resolve(json));
+    });
+}
+
 function getProductos(){
     return new Promise((resolve,reject)=>{
         fetch(url + "productos").then((response) => response.json()).then((json)=>resolve(json));
-    })
+    });
 }
 
 
 
 
 
-export {getTipos, getProductos};
+export {getTipos,getCondiones,getProductos};
