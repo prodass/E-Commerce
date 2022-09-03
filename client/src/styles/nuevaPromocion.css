@@ -2,5 +2,23 @@ body {
     margin: 0;
     padding: 0;
     text-align: left;
-    background-color: #94B49F;
+}
+
+.error{
+    color: red;
+}
+
+.label{
+    font-family: 'Inter', sans-serif;
+}
+
+
+.container-fluid{
+    text-align: center;
+}
+
+.form-btn{
+    display: inline-block;
+    margin: 25px 50px 0 50px;
+
 }

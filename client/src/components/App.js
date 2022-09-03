@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 
 import Home from "./Home/Home";
-import NXM from "./Promociones/NXM/NxM";
-import Descuento from "./Promociones/Descuento/Descuento";
-import Codigo from "./Promociones/Codigo/Codigo";
 import PopUp from "./Promociones/PopUp";
 import NuevaPromocion from "./Promociones/NuevaPromocion";
 
@@ -29,7 +26,7 @@ function App(){
     return (<div>
         <Home handleClick = {handleHomeClick}/>
         <PopUp show = {showPopUp} handleClose = {handlePopUpClose} handleClick = {handlePopUpClick}/>
-        <NuevaPromocion show = {showNuevaPromocion} codigoPromocion = {codigoPromocion} handleClose = {handleNuevaPromocionClose}/>
+        {showNuevaPromocion && <NuevaPromocion handleClose = {handleNuevaPromocionClose} codigoPromocion = {codigoPromocion}/>}
     </div>)
 }
 
