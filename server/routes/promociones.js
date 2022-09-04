@@ -8,4 +8,6 @@ router.get("/tipos", promocionesController.getTipos);
 router.get("/condiciones", promocionesController.getCondiones);
 router.get("/productos", promocionesController.getProductos);
 
+router.post("/descuento", promocionesController.registrarPromocion);
+
 export default router;

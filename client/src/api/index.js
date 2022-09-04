@@ -18,8 +18,21 @@ function getProductos(){
     });
 }
 
+function registrarDescuento(nuevoDescuento){
+    return new Promise((resolve,reject)=>{
+        fetch(url + "descuento", {
+            method: 'POST',
+            body: JSON.stringify({nuevoDescuento}),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+      },
+      })
+      .then((response) => response.json())
+      .then((json) => resolve(json));
+      });
+}
 
 
 
 
-export {getTipos,getCondiones,getProductos};
+export {getTipos,getCondiones,getProductos, registrarDescuento};

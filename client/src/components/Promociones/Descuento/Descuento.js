@@ -12,16 +12,16 @@ import Valor from "../FormInputs/Valor";
 import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
 
-import { getCondiones, getProductos } from "../../../api";
+import { getCondiones, getProductos, registrarDescuento } from "../../../api";
 
 function Descuento(props){
-    const [formValues, setFormValues] = useState({descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",productos: []});
+    const [formValues, setFormValues] = useState({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"", descuento: ""});
     const [condiciones, setCondiciones] = useState([]);
     const [productos, setProducto] = useState([]);
     const [productosSeleccionados, setProductosSeleccionados] = useState([]);
 
     useEffect(()=>{
-        setFormValues({descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",productos: []});
+        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
         getCondiones().then(json => setCondiciones(json));
         getProductos().then((json) => {
             if(productos.length === 0){
@@ -48,10 +48,9 @@ function Descuento(props){
 
     function handleSubmit(event){
         event.preventDefault();
-        if(productosSeleccionados.length === 0){
-            alert("Error no se pudo registrar la nueva promocion");
-        }
-
+        console.log(formValues);
+        console.log(productosSeleccionados);
+        registrarDescuento({formValues, productosSeleccionados});
     }
 
     return (<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">
@@ -76,13 +75,13 @@ function Descuento(props){
                 </div>
                 <div className="col col-9">
                 <InputGroup>
-                <Form.Control type="text" placeholder="1%-100%" required pattern = "^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$"/>
+                <Form.Control type="text" placeholder="1%-100%" required pattern = "^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$" value = {formValues.descuento} onChange = {handleFormChange} name = "descuento"/>
                 <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
                 </InputGroup>
                 </div>
             </Form.Group>
             <Productos productos = {productos} value = {productosSeleccionados} handleOnChange = {setProductosSeleccionados}/>
-            <Buttons/>
+            <Buttons handleClose = {props.handleClose}/>
         </Form>
     </Modal.Body>
   </Modal>
