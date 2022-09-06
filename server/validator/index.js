@@ -2,7 +2,7 @@ import Tipo from "../models/tipo.js";
 import Condicion from "../models/condicion.js";
 
 
-function validateForm(formInput){
+async function validateForm(formInput){
     //Validar que exista el codigo de tipo de promocion especificado;
     Tipo.find((err,foundTipos)=>{
         if(err){
@@ -11,7 +11,7 @@ function validateForm(formInput){
         else{
             let band = false;
             foundTipos.forEach((tipo)=>{
-                if(tipo.codigo === formInput.formValues.codigoPromocion){
+                if(tipo.codigo == formInput.formValues.codigoPromocion){
                     band = true;
                 }
             });
@@ -43,24 +43,29 @@ function validateForm(formInput){
         return false;
     }
 
+    //Validar descuento;
+    if(formInput.formValues.descuento.length === 0){
+        return false;
+    }
+
     //Validar dependiendo cada tipo de promocion;
     switch(formInput.formValues.codigoPromocion){
         case 1:
-            if(!validarDescuento("1",formInput.formValues.condicion, formInput.formValues.valor)){
+            if(await validarDescuento("1",formInput.formValues.condicion, formInput.formValues.valor) === false){
                 return false;
             }
             break;
     }
 
 
-    //Si paso todo sin devolver
+    //Si paso todo sin devolver;
     return true;
 }
 
 
-function validarDescuento(codigoPromocion, codigoCondicion, valor){
-    if(codigoCondicion != 0){
-        Condicion.find().populate("tipo").exec((err,foundCondiciones)=>{
+async function validarDescuento(codigoPromocion, codigoCondicion, valor){
+    if(Number(codigoCondicion) != 0){
+        await Condicion.find().populate("tipo").exec((err,foundCondiciones)=>{
             if(err){
                 return false;
             }
@@ -68,8 +73,8 @@ function validarDescuento(codigoPromocion, codigoCondicion, valor){
                 if(foundCondiciones){
                     let band = false;
                     foundCondiciones.forEach((condicion)=>{
-                        if(condicion.tipo.codigo === codigoPromocion){
-                            if(condicion.codigo === codigoCondicion){
+                        if(condicion.tipo.codigo == codigoPromocion){
+                            if(condicion.codigo == codigoCondicion){
                                 band = true
                             }
                         }

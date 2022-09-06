@@ -7,7 +7,7 @@ function Condicion(props){
     <Form.Select name = "condicion" value = {props.value} onChange={props.handleOnChange}>
     <option key = {0} value = {0}>Sin condicion</option>
     {props.condiciones.map((condicion)=>{
-        if(condicion.tipo.codigo === props.codigoPromocion){
+        if(Number(condicion.tipo.codigo) === props.codigoPromocion){
             return <option key = {condicion.codigo} value = {condicion.codigo}>{condicion.descripcion}</option>
         }
     })}

@@ -46,11 +46,17 @@ function Descuento(props){
         });
     }
 
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault();
-        console.log(formValues);
-        console.log(productosSeleccionados);
-        registrarDescuento({formValues, productosSeleccionados});
+        const response = await registrarDescuento({formValues, productosSeleccionados});
+        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
+        setProductosSeleccionados([]);
+        if(response.code != 200){
+            alert("Error, no se pudo registrar la promocion");
+        }
+        else{
+            alert("Promocion registrada");
+        }
     }
 
     return (<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">

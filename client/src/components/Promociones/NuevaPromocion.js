@@ -11,8 +11,18 @@ function NuevaPromocion(props){
     }
 
     useState(()=>{
-        if(props.codigoPromocion == 1){
-            setShowDescuento(true);
+        switch(props.codigoPromocion){
+            case 1:
+                setShowDescuento(true);
+                break;
+            case 2:
+                //no implementado
+                props.handleClose();
+                break;
+            case 3:
+                //no implementado
+                props.handleClose();
+                break;
         }
     },[]);
 

@@ -40,7 +40,7 @@ function getCondiones(req,res){
                 res.status(501).json({message: "No existen condiciones en la DB"});
             }
         }
-    })
+    });
 }
 
 
@@ -61,8 +61,23 @@ function getProductos(req,res){
     })
 }
 
+function getPromociones(req,res){
+    Promocion.find().populate("productos").populate("tipo").populate("condicion").exec((err,foundPromociones)=>{
+        if(err){
+            res.status(500).json({message: err.message});
+        }
+        else{
+            if(foundPromociones){
+                res.status(200).json(foundPromociones);
+            }
+            else{
+                res.status(501).json({message: "No existen promociones en la DB"});
+            }
+        }
+    });
+}
+
 function registrarPromocion(req,res){
-    const descuento = req.body.nuevoDescuento.formValues.descuento; //Esto esta sin implementar
     if(validateForm(req.body.nuevoDescuento)){
         const prodcutosId = [];
         let tipoId;
@@ -112,36 +127,49 @@ function registrarPromocion(req,res){
             }
             else{
                 if(condicionId === 0){
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: descuento, tipo: tipoId});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});
                         }
                         else{
-                            res.status(200).json({message: "Promocion registrada"});
+                            Producto.updateMany({_id: newPromocion.productos},{$push:{promociones: newPromocion._id}},(err)=>{
+                                if(err){
+                                     res.status(500).json({message: err.message});
+                                }
+                                else{
+                                    res.status(200).json({message: "Promocion registrada", code: 200});
+                                }
+                            });
                         }
                     });
                 }
                 else{   
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: descuento, tipo: tipoId, condicion : condicionId, valor: req.body.nuevoDescuento.formValues.valor});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevoDescuento.formValues.valor});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});
                         }
                         else{
-                            res.status(200).json({message: "Promocion registrada"});
+                            Producto.updateMany({_id: newPromocion.productos},{$push:{promociones: newPromocion._id}},(err)=>{
+                                if(err){
+                                     res.status(500).json({message: err.message});
+                                }
+                                else{
+                                    res.status(200).json({message: "Promocion registrada", code: 200});
+                                }
+                            });
                         }
                     });
                 }
                 
             }
         });
-
-
     }
     else{
+        console.log("wtf pasa aca");
         res.status(400).json({message: "Formulario incorrecto"});
     }
 }
 
-export {getInicio, getTipos, getProductos, getCondiones, registrarPromocion}
+export {getInicio, getTipos, getProductos, getCondiones,getPromociones ,registrarPromocion}
