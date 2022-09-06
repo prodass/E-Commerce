@@ -18,6 +18,12 @@ function getProductos(){
     });
 }
 
+function getPromocionesById(id){
+    return new Promise((resolve,reject)=>{
+        fetch(url + "promociones/" + id).then((response) => response.json()).then((json)=>resolve(json));
+    });
+}
+
 function registrarDescuento(nuevoDescuento){
     return new Promise((resolve,reject)=>{
         fetch(url + "descuento", {
@@ -35,4 +41,4 @@ function registrarDescuento(nuevoDescuento){
 
 
 
-export {getTipos,getCondiones,getProductos, registrarDescuento};
+export {getTipos,getCondiones,getProductos,getPromocionesById,registrarDescuento};

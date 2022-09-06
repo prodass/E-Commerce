@@ -77,6 +77,28 @@ function getPromociones(req,res){
     });
 }
 
+function getPromocionesById(req,res){
+    const promocionesValidas = [];
+    Promocion.find().populate("productos").populate("tipo").populate("condicion").exec((err,foundPromociones)=>{
+        if(err){
+            res.status(500).json({message: err.message});
+        }
+        else{
+            if(foundPromociones){
+                foundPromociones.forEach(promocion =>{
+                    if(promocion.tipo.codigo === req.params.id){
+                        promocionesValidas.push(promocion);
+                    }
+                });
+                res.status(200).json(promocionesValidas);
+            }
+            else{
+                res.status(501).json({message: "No existen promociones en la DB"});
+            }
+        }
+    });
+}
+
 function registrarPromocion(req,res){
     if(validateForm(req.body.nuevoDescuento)){
         const prodcutosId = [];
@@ -172,4 +194,4 @@ function registrarPromocion(req,res){
     }
 }
 
-export {getInicio, getTipos, getProductos, getCondiones,getPromociones ,registrarPromocion}
+export {getInicio, getTipos, getProductos, getCondiones,getPromociones, getPromocionesById, registrarPromocion}

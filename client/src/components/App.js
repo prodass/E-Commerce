@@ -25,7 +25,7 @@ function App(){
 
     return (<div>
         <Home handleClick = {handleHomeClick}/>
-        <PopUp show = {showPopUp} handleClose = {handlePopUpClose} handleClick = {handlePopUpClick}/>
+        <PopUp show = {showPopUp} handleClose = {handlePopUpClose} handleClick = {handlePopUpClick} codigoPromocion = {codigoPromocion}/>
         {showNuevaPromocion && <NuevaPromocion handleClose = {handleNuevaPromocionClose} codigoPromocion = {codigoPromocion}/>}
     </div>)
 }
