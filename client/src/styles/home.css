@@ -51,6 +51,8 @@
 .btn:hover{
     background-color: #b2ccb5;
     border-color: #8C938D;
+    box-shadow: 2px 2px rgba(128, 128, 128, 0.4);
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 
