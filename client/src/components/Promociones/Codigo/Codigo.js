@@ -1,87 +1,79 @@
-import React , {useState} from "react";
+import React, { useEffect, useState } from "react";
 
-import PopUp from "../PopUp";
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
-function Codigo(){
-    const [estado, setEstado] = useState(0)
-    function handleModalClick(id){
-        setEstado(id);
+import NombrePromocion from "../FormInputs/NombrePromocion";
+import FechaInicioYFin from "../FormInputs/FechaInicioYFin";
+import Valor from "../FormInputs/Valor";
+import Productos from "../FormInputs/Productos";
+import Buttons from "../FormInputs/Buttons";
+
+import {getProductos} from "../../../api";
+
+function Codigo(props){
+    const [formValues, setFormValues] = useState({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",valor:"", descuento: ""});
+    const [productos, setProductos] = useState([]);
+    const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+
+    useEffect(() => {
+        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",valor:"",descuento: ""});
+        getProductos().then((json) => {
+            if(productos.length === 0){
+                json.forEach((producto)=>{
+                    setProductos((prev)=>{
+                        return [...prev, {label:producto.nombre, value: producto.codigo}]
+                    });
+                });
+            }
+        });
+    },[]);
+
+    function handleFormChange(event){
+        const name = event.target.name;
+        const value = event.target.value;
+        setFormValues((prevValue) =>{
+            return{
+                ...prevValue,
+                [name]: value
+            };
+        });
     }
-    return <div>
-        {estado === 0 && <PopUp handleModalClick = {handleModalClick}/>}
-        {estado === 1 && <p>nueva promocion</p>}
-        {estado === 2 && <p>Promocion existentes</p>}
-    </div>
+
+    function handleSubmit(event){
+        event.preventDefault();
+        console.log(formValues, productosSeleccionados);
+        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
+        setProductosSeleccionados([]);
+        console.log("no implementado");
+    }
+    return(<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">
+    <Modal.Header closeButton>
+      <Modal.Title>Codigo</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+    <Form validated = {true} onSubmit = {handleSubmit}>
+            <NombrePromocion handleOnChange = {handleFormChange} value = {formValues.descripcion}/>
+            <FechaInicioYFin handleOnChange = {handleFormChange} valueFechaInicio = {formValues.fechaInicio} valueFechaFin = {formValues.fechaFin}/>
+            <Valor handleOnChange = {handleFormChange} value = {formValues.valor} condicion = {formValues.condicion} type = "text"/>
+            <Form.Group className="mb-3 row" controlId="formBasicEmail">
+                <div className="col col-3">
+                    <Form.Label>Porcentaje de descuento</Form.Label>
+                </div>
+                <div className="col col-9">
+                <InputGroup>
+                <Form.Control type="text" placeholder="1%-100%" required pattern = "^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$" value = {formValues.descuento} onChange = {handleFormChange} name = "descuento"/>
+                <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
+                </InputGroup>
+                </div>
+            </Form.Group>
+            <Productos productos = {productos} value = {productosSeleccionados} handleOnChange = {setProductosSeleccionados}/>
+            <Buttons handleClose = {props.handleClose}/>
+        </Form>
+    </Modal.Body>
+  </Modal>)
 }
 
+
 export default Codigo;
-
-
-<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} className="modal" size = "xl">
-      <Modal.Header closeButton>
-        <Modal.Title className = "title">Nueva Promoción</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form validated = {true} onSubmit = {handleSubmit}>
-            <FormGroup className="mb-3 row">
-            <div className="col col-3">
-            <Form.Label className="label">Nombre de la promoción</Form.Label>
-            </div>
-            <div className="col col-9">
-            <Form.Control type = "text" placeholder="Ingrese la descripcion de promocion" name = "descripcion" onChange = {handleFormChange} value = {formValues.descripcion} required/>
-            </div>
-            
-            </FormGroup>
-            <FormGroup className="mb-3 row">
-                <div className="col col-lg-6">
-                <Form.Label className="label">Fecha Inicio</Form.Label>
-                <Form.Control type = "datetime-local" name = "fechaInicio" onChange = {handleFormChange} value = {formValues.fechaInicio} required min = {dateString}/>
-                </div>
-                <div className="col col-lg-6"> 
-                <Form.Label className="label">Fecha Fin</Form.Label>
-                <Form.Control type = "datetime-local" placeholder="Ingrese la descripcion de promocion" name = "fechaFin" onChange = {handleFormChange} value = {formValues.fechaFin} required min={formValues.fechaInicio}/>
-                </div>
-            </FormGroup>
-            <FormGroup className="mb-3 row">
-                <div className="col col-3">
-                <Form.Label className="label">Condicion</Form.Label>
-                </div>
-                <div className="col col-9">
-                <Form.Select name = "condicion" value = {formValues.condicion} onChange={handleFormChange}>
-                <option key = {0} value = {0}>Sin condicion</option>
-                {condiciones.map((condicion)=>{
-                    if(condicion.tipo.codigo === props.codigoPromocion){
-                        return <option key = {condicion.codigo} value = {condicion.codigo}>{condicion.descripcion}</option>
-                    }
-                })}
-            </Form.Select>
-                </div>
-            </FormGroup>
-            <FormGroup className="mb-3 row">
-            <div className="col col-3">
-            <Form.Label className="label">Valor</Form.Label>
-            </div>
-                <div className="col col-9">
-                <Form.Control type = "text" placeholder="Ingrese el valor correspondiente de la condicion" name = "valor" onChange = {handleFormChange} value = {formValues.valor} required disabled = {formValues.condicion == 0 ? true : false}/>
-                </div>
-            
-            
-            </FormGroup>
-            <FormGroup className="mb-3 row ">
-            <div className="col col-3">
-            <Form.Label className="label">Productos</Form.Label>
-            </div>
-                <div className="col col-9">
-                <MultiSelect options={productos} value={productosSeleccionados} onChange={setProductosSeleccionados} labelledBy="productos"/>
-                 {productosSeleccionados.length === 0 && <p className="error">Seleccione al menos un producto</p>}
-            </div>     
-            </FormGroup>
-            <div className="container-fluid">
-                <button className="btn form-btn"  onClick={props.handleClose} type = "button">Cancelar</button>
-                <button className="btn form-btn" type = "submit">Registrar</button>
-            </div>
-            
-        </Form>
-        
-      </Modal.Body>
-    </Modal>

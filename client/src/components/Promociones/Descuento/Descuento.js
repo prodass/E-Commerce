@@ -72,7 +72,7 @@ function Descuento(props){
                 <Condicion codigoPromocion = {props.codigoPromocion} condiciones = {condiciones} value = {formValues.condicion} handleOnChange = {handleFormChange}/>
                 </div>
                 <div className = "col col-6">
-                <Valor handleOnChange = {handleFormChange} value = {formValues.valor} condicion = {formValues.condicion}/>
+                <Valor handleOnChange = {handleFormChange} value = {formValues.valor} condicion = {formValues.condicion} type = "number"/>
                 </div>
             </div>
             <Form.Group className="mb-3 row" controlId="formBasicEmail">
