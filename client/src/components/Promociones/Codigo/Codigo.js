@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 
 import NombrePromocion from "../FormInputs/NombrePromocion";
 import FechaInicioYFin from "../FormInputs/FechaInicioYFin";
 import Valor from "../FormInputs/Valor";
 import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
+import PorcentajeDeDescuento from "../FormInputs/PorcentajeDeDescuento";
 
 import {getProductos} from "../../../api";
 
@@ -62,10 +62,7 @@ function Codigo(props){
                     <Form.Label>Porcentaje de descuento</Form.Label>
                 </div>
                 <div className="col col-9">
-                <InputGroup>
-                <Form.Control type="text" placeholder="1%-100%" required pattern = "^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$" value = {formValues.descuento} onChange = {handleFormChange} name = "descuento"/>
-                <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
-                </InputGroup>
+                    <PorcentajeDeDescuento value = {formValues.descuento} onChange = {handleFormChange}/>
                 </div>
             </Form.Group>
             <Productos productos = {productos} value = {productosSeleccionados} handleOnChange = {setProductosSeleccionados}/>

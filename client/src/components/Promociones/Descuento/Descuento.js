@@ -11,6 +11,7 @@ import Condicion from "../FormInputs/Condicion";
 import Valor from "../FormInputs/Valor";
 import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
+import PorcentajeDeDescuento from "../FormInputs/PorcentajeDeDescuento";
 
 import { getCondiones, getProductos, registrarDescuento } from "../../../api";
 
@@ -19,6 +20,7 @@ function Descuento(props){
     const [condiciones, setCondiciones] = useState([]);
     const [productos, setProducto] = useState([]);
     const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+    const [validated, setValidated] = useState(false);
 
     useEffect(()=>{
         setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
@@ -36,6 +38,7 @@ function Descuento(props){
     },[]);
     
     function handleFormChange(event){
+        setValidated(true);
         const name = event.target.name;
         const value = event.target.value;
         setFormValues((prevValue) =>{
@@ -64,7 +67,7 @@ function Descuento(props){
       <Modal.Title>Descuento</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-        <Form validated = {true} onSubmit = {handleSubmit}>
+        <Form validated = {validated} onSubmit = {handleSubmit}>
             <NombrePromocion handleOnChange = {handleFormChange} value = {formValues.descripcion}/>
             <FechaInicioYFin handleOnChange = {handleFormChange} valueFechaInicio = {formValues.fechaInicio} valueFechaFin = {formValues.fechaFin}/>
             <div className="row">
@@ -80,10 +83,7 @@ function Descuento(props){
                     <Form.Label>Porcentaje de descuento</Form.Label>
                 </div>
                 <div className="col col-9">
-                <InputGroup>
-                <Form.Control type="text" placeholder="1%-100%" required pattern = "^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$" value = {formValues.descuento} onChange = {handleFormChange} name = "descuento"/>
-                <InputGroup.Text id="basic-addon1">%</InputGroup.Text>
-                </InputGroup>
+                <PorcentajeDeDescuento value = {formValues.descuento} onChange = {handleFormChange}/>
                 </div>
             </Form.Group>
             <Productos productos = {productos} value = {productosSeleccionados} handleOnChange = {setProductosSeleccionados}/>
