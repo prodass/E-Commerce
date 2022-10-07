@@ -99,8 +99,10 @@ function getPromocionesById(req,res){
     });
 }
 
-function registrarPromocion(req,res){
-    if(validateForm(req.body.nuevoDescuento)){
+async function registrarPromocion(req,res){
+    const validated = await validateForm(req.body.nuevoDescuento);
+    console.log(validated);
+    if(validated){
         const prodcutosId = [];
         let tipoId;
         let condicionId = 0;
@@ -189,7 +191,6 @@ function registrarPromocion(req,res){
         });
     }
     else{
-        console.log("wtf pasa aca");
         res.status(400).json({message: "Formulario incorrecto"});
     }
 }
