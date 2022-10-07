@@ -99,51 +99,73 @@ function getPromocionesById(req,res){
     });
 }
 
-async function registrarPromocion(req,res){
-    const validated = await validateForm(req.body.nuevoDescuento);
-    console.log(validated);
-    if(validated){
-        const prodcutosId = [];
-        let tipoId;
-        let condicionId = 0;
+function getIdProductos(productosSeleccionados){
+    return new Promise((resolve,reject)=>{
         Producto.find((err,foundProductos)=>{
+            const productosId = []
             if(err){
-                res.status(500).json({message: err.message});
+                resolve(false);
             }
             else{
                 foundProductos.forEach(producto =>{
-                    req.body.nuevoDescuento.productosSeleccionados.forEach(productoSeleccionado =>{
+                    productosSeleccionados.forEach(productoSeleccionado =>{
                         if(producto.codigo == productoSeleccionado.value){
-                            prodcutosId.push(producto._id);
+                            productosId.push(producto._id);
                         }
                     });
                 });
+                resolve(productosId);
             }
         });
+    });
+}
+
+function getIdTipo(codigoPromocion){
+    return new Promise((resolve,reject)=>{
+        let tipoId;
         Tipo.find((err,foundTipos)=>{
             if(err){
-                res.status(500).json({message: err.message});
+                resolve(false);
             }
             else{
                 foundTipos.forEach(tipo =>{
-                    if(tipo.codigo == req.body.nuevoDescuento.formValues.codigoPromocion){
+                    if(tipo.codigo == codigoPromocion){
                         tipoId = tipo._id;
                     }
                 });
+                resolve(tipoId);
             }
         });
+    });
+}
+
+function getIdCondicion(condicion){
+    return new Promise((resolve,reject)=>{
+        let condicionId = 0;
         Condicion.find((err,foundCondiciones)=>{
             if(err){
-                res.status(500).json({message: err.message});
+                resolve(false);
             }
             else{
                 foundCondiciones.forEach(condicion =>{
-                    if(condicion.codigo == req.body.nuevoDescuento.formValues.condicion){
+                    if(condicion.codigo == condicion){
                         condicionId = condicion._id;
                     }
                 });
             }
+            resolve(condicionId);
         });
+    });
+}
+
+async function registrarPromocion(req,res){
+    if(await validateForm(req.body.nuevoDescuento)){
+        const productosId = await getIdProductos(req.body.nuevoDescuento.productosSeleccionados);
+        const tipoId = await getIdTipo(req.body.nuevoDescuento.formValues.codigoPromocion);
+        let condicionId = await getIdCondicion(req.body.nuevoDescuento.formValues.condicion);
+        if(productosId === false || tipoId === false || condicionId === false){
+            res.status(500).json({message: "erro en db"});
+        }
 
         Promocion.find((err,foundPromociones)=>{
             if(err){
@@ -151,7 +173,7 @@ async function registrarPromocion(req,res){
             }
             else{
                 if(condicionId === 0){
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: productosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});
@@ -169,7 +191,7 @@ async function registrarPromocion(req,res){
                     });
                 }
                 else{   
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: prodcutosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevoDescuento.formValues.valor});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: productosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevoDescuento.formValues.valor});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});
