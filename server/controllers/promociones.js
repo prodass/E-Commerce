@@ -159,10 +159,10 @@ function getIdCondicion(condicion){
 }
 
 async function registrarPromocion(req,res){
-    if(await validateForm(req.body.nuevoDescuento)){
-        const productosId = await getIdProductos(req.body.nuevoDescuento.productosSeleccionados);
-        const tipoId = await getIdTipo(req.body.nuevoDescuento.formValues.codigoPromocion);
-        let condicionId = await getIdCondicion(req.body.nuevoDescuento.formValues.condicion);
+    if(await validateForm(req.body.nuevaPromocion)){
+        const productosId = await getIdProductos(req.body.nuevaPromocion.productosSeleccionados);
+        const tipoId = await getIdTipo(req.body.nuevaPromocion.formValues.codigoPromocion);
+        let condicionId = await getIdCondicion(req.body.nuevaPromocion.formValues.condicion);
         if(productosId === false || tipoId === false || condicionId === false){
             res.status(500).json({message: "erro en db"});
         }
@@ -173,7 +173,7 @@ async function registrarPromocion(req,res){
             }
             else{
                 if(condicionId === 0){
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: productosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});
@@ -191,7 +191,7 @@ async function registrarPromocion(req,res){
                     });
                 }
                 else{   
-                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevoDescuento.formValues.descripcion, fechaInicio: new Date(req.body.nuevoDescuento.formValues.fechaInicio), fechaFin: new Date(req.body.nuevoDescuento.formValues.fechaFin), productos: productosId, descuento: req.body.nuevoDescuento.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevoDescuento.formValues.valor});
+                    const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevaPromocion.formValues.valor});
                     newPromocion.save((err)=>{
                         if(err){
                             res.status(500).json({message: err.message});

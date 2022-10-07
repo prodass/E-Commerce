@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 
 import Modal from 'react-bootstrap/Modal'; 
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 
 
 import NombrePromocion from "../FormInputs/NombrePromocion";
@@ -13,7 +12,7 @@ import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
 import PorcentajeDeDescuento from "../FormInputs/PorcentajeDeDescuento";
 
-import { getCondiones, getProductos, registrarDescuento } from "../../../api";
+import { getCondiones, getProductos, registrarPromocion } from "../../../api";
 
 function Descuento(props){
     const [formValues, setFormValues] = useState({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"", descuento: ""});
@@ -51,14 +50,19 @@ function Descuento(props){
 
     async function handleSubmit(event){
         event.preventDefault();
-        const response = await registrarDescuento({formValues, productosSeleccionados});
-        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
-        setProductosSeleccionados([]);
-        if(response.code != 200){
-            alert("Error, no se pudo registrar la promocion");
+        if(productosSeleccionados.length === 0){
+            alert("Seleccione al menos un producto");
         }
         else{
-            alert("Promocion registrada");
+            const response = await registrarPromocion({formValues, productosSeleccionados});
+            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
+            setProductosSeleccionados([]);
+            if(response.code != 200){
+                alert("Error, no se pudo registrar la promocion");
+            }
+            else{
+                alert("Promocion registrada");
+            }
         }
     }
 
@@ -75,7 +79,10 @@ function Descuento(props){
                 <Condicion codigoPromocion = {props.codigoPromocion} condiciones = {condiciones} value = {formValues.condicion} handleOnChange = {handleFormChange}/>
                 </div>
                 <div className = "col col-6">
-                <Valor handleOnChange = {handleFormChange} value = {formValues.valor} condicion = {formValues.condicion} type = "number"/>
+                <Form.Group className="mb-3">
+                    <Form.Label className="label">Valor</Form.Label>
+                        <Form.Control type = "number" placeholder="Ingrese el valor correspondiente de la condicion" name = "valor" onChange = {handleFormChange} value = {formValues.valor} required disabled = {formValues.condicion == 0 ? true : false} min = {1}/>
+                    </Form.Group>
                 </div>
             </div>
             <Form.Group className="mb-3 row" controlId="formBasicEmail">
