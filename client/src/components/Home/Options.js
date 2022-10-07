@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Button from "../Button";
+import Button from "../MainButton";
 
 import { getTipos } from "../../api";
 
@@ -12,7 +12,7 @@ function Options(props){
 
     return  (<div className="options">
     <h3 className="sub-title">Seleccione la categoria deseada</h3>
-    <div>
+    <div className="options-btn">
         {tipos.map((element)=>{
             return <Button key = {element.codigo} text = {element.descripcion} handleClick = {props.handleClick} codigo = {Number(element.codigo)}/>
         })}

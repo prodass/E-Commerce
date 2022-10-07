@@ -3,6 +3,8 @@
 .header{
     background-color: #CEE5D0;
     height: 100vh;
+    padding-bottom: 3%;
+    padding-left: 0%;
 }
 
 .title{
@@ -11,7 +13,7 @@
     align-items: center;
     text-align: left;
     color: #8C938D;
-    padding-top: 2rem;
+    padding-top: 3rem;
     padding-left: 2rem;
     font-family: 'Josefin Sans', sans-serif;
 }
@@ -19,11 +21,13 @@
 .title-image{
     display: block;
     margin: auto;
-    margin-top: 10%;
-    width: 50%;
+    margin-top: 12%;
+    width: 55%;
 }
 
-
+.row{
+    --bs-gutter-x: 0rem;
+}
 /*Options*/
 
 .options{
@@ -33,28 +37,43 @@
     text-align: center;
 }
 
+.options-btn{
+    margin-top: 18%;
+}
+
 .sub-title{
     font-style: normal;
-    font-size: 24px;
+    font-size: 25px;
     line-height: 23px;
     color: #CEE5D0;
     padding: 3rem;
     font-family: 'Josefin Sans', sans-serif;
+    
 }
 
 .btn{
     display: block;
     background-color: #CEE5D0;
     margin: 5% 0;
+    transition: box-shadow .5s ease-in-out;
+    transition: background-color .4s ease-in-out;
     font-family: 'Inter', sans-serif;
 }
+
+.main-btn{
+    padding: 1%;
+    margin: 7% 0;
+    transition: background-color .4s ease-in-out;
+    transition: box-shadow .4s ease-in-out;
+}
+
 .btn:hover{
     background-color: #b2ccb5;
     border-color: #8C938D;
-    box-shadow: 2px 2px rgba(128, 128, 128, 0.4);
-    transition: box-shadow 0.3s ease-in-out;
+    box-shadow: 3px 3px rgba(128, 128, 128, 0.4);
+    transition: background-color .3s ease-in-out;
+    transition: box-shadow .3s ease-in-out;
 }
-
 
 .download-section{
     margin-top: 40px;
