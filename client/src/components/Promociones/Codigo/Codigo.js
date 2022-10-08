@@ -62,7 +62,7 @@ function Codigo(props){
     }
     return(<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">
     <Modal.Header closeButton>
-      <Modal.Title>Codigo</Modal.Title>
+      <Modal.Title>Código</Modal.Title>
     </Modal.Header>
     <Modal.Body>
     <Form validated = {validated} onSubmit = {handleSubmit}>

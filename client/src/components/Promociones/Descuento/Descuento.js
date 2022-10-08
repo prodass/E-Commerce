@@ -74,20 +74,20 @@ function Descuento(props){
         <Form validated = {validated} onSubmit = {handleSubmit}>
             <NombrePromocion handleOnChange = {handleFormChange} value = {formValues.descripcion}/>
             <FechaInicioYFin handleOnChange = {handleFormChange} valueFechaInicio = {formValues.fechaInicio} valueFechaFin = {formValues.fechaFin}/>
-            <div className="row">
-                <div className = "col col-6">
+            <div className="row gx-5">
+                <div className = "col col-6 gx-3">
                 <Condicion codigoPromocion = {props.codigoPromocion} condiciones = {condiciones} value = {formValues.condicion} handleOnChange = {handleFormChange}/>
                 </div>
-                <div className = "col col-6">
+                <div className = "col col-6 gx-3">
                 <Form.Group className="mb-3">
-                    <Form.Label className="label">Valor</Form.Label>
+                    <Form.Label className="label">Valor:</Form.Label>
                         <Form.Control type = "number" placeholder="Ingrese el valor correspondiente de la condicion" name = "valor" onChange = {handleFormChange} value = {formValues.valor} required disabled = {formValues.condicion == 0 ? true : false} min = {1}/>
                     </Form.Group>
                 </div>
             </div>
             <Form.Group className="mb-3 row" controlId="formBasicEmail">
                 <div className="col col-3">
-                    <Form.Label>Porcentaje de descuento</Form.Label>
+                    <Form.Label>Porcentaje de descuento: </Form.Label>
                 </div>
                 <div className="col col-9">
                 <PorcentajeDeDescuento value = {formValues.descuento} onChange = {handleFormChange}/>
