@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form';
 import NombrePromocion from "../FormInputs/NombrePromocion";
 import FechaInicioYFin from "../FormInputs/FechaInicioYFin";
 import Condicion from "../FormInputs/Condicion";
-import Valor from "../FormInputs/Valor";
 import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
 import PorcentajeDeDescuento from "../FormInputs/PorcentajeDeDescuento";

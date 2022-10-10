@@ -8,7 +8,6 @@ import Form from 'react-bootstrap/Form';
 import NombrePromocion from "../FormInputs/NombrePromocion";
 import FechaInicioYFin from "../FormInputs/FechaInicioYFin";
 import Condicion from "../FormInputs/Condicion";
-import Valor from "../FormInputs/Valor";
 import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
 
@@ -47,9 +46,11 @@ function NxM(props){
 
     async function handleSubmit(event){
         event.preventDefault();
-        /*
         if(productosSeleccionados.length === 0){
             alert("Seleccione al menos un producto");
+        }
+        else if (!setDescuento()){
+            alert("Ingrese un formato de NxM valido");
         }
         else{
             const response = await registrarPromocion({formValues, productosSeleccionados});
@@ -62,8 +63,17 @@ function NxM(props){
                 alert("Promocion registrada");
             }
         }
-        */
-       alert("no implementado");
+    }
+
+    function setDescuento(){
+        const descuento = Number(formValues.valor[2]) / Number(formValues.valor[0]);
+        if(descuento < 1){
+            formValues.descuento = (descuento * 100).toString();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     return(<Modal show = {props.show} onHide = {props.handleClose} centered backdrop = "static" keyboard = {false} size = "xl">

@@ -29,7 +29,6 @@ function FechaInicioYFin(props){
         if(minutes.toString().length === 1){
             minutes = "0" + minutes;
         }
-        console.log(year + "-" + month + "-" + day + "T" + hour + ":" + minutes);
         return (year + "-" + month + "-" + day + "T" + hour + ":" + minutes);
     }
 

@@ -31,7 +31,7 @@ async function validateForm(formInput){
         validated = false;
     }
     //Validar descuento;
-    if(formInput.formValues.descuento.length === 0){
+    if(formInput.formValues.descuento.toString().length === 0){
         validated = false;
     }
     //Validar dependiendo cada tipo de promocion;
@@ -41,6 +41,10 @@ async function validateForm(formInput){
                 validated = false;
             }
             break;
+        case 2:
+            if(await validarCondicionDePromocion("2",formInput.formValues.condicion, formInput.formValues.descuento) === false){
+                validated = false;
+            }
     }
     //Si paso todo sin devolver;
     return validated;
