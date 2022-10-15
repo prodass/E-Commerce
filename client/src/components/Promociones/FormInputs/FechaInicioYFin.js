@@ -35,11 +35,11 @@ function FechaInicioYFin(props){
     return  <Form.Group className="mb-3 row">
     <div className="col col-lg-6 gx-3">
     <Form.Label className="label">Fecha Inicio: </Form.Label>
-    <Form.Control type = "datetime-local" name = "fechaInicio" onChange = {props.handleOnChange} value = {props.valueFechaInicio} required min = {dateString}/>
+    <Form.Control type = "datetime-local" name = "fechaInicio" onChange = {props.handleOnChange} value = {props.valueFechaInicio} required min = {dateString} onKeyDown = {(e)=>e.preventDefault()}/>
     </div>
     <div className="col col-lg-6 gx-3"> 
     <Form.Label className="label">Fecha Fin: </Form.Label>
-    <Form.Control type = "datetime-local" placeholder="Ingrese la descripcion de promocion" name = "fechaFin" onChange = {props.handleOnChange} value = {props.valueFechaFin} required min={props.valueFechaInicio}/>
+    <Form.Control type = "datetime-local" placeholder="Ingrese la descripcion de promocion" name = "fechaFin" onChange = {props.handleOnChange} value = {props.valueFechaFin} required min={props.valueFechaInicio} onKeyDown = {(e)=>e.preventDefault()}/>
     </div>
 </Form.Group>
 }
