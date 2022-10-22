@@ -56,6 +56,7 @@ function Codigo(props){
             }
             else{
                 alert("Promocion registrada");
+                props.handleClose();
             }
         }
     }

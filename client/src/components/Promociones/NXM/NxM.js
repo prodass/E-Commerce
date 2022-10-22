@@ -61,6 +61,7 @@ function NxM(props){
             }
             else{
                 alert("Promocion registrada");
+                props.handleClose();
             }
         }
     }

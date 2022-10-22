@@ -61,6 +61,7 @@ function Descuento(props){
             }
             else{
                 alert("Promocion registrada");
+                props.handleClose();
             }
         }
     }
