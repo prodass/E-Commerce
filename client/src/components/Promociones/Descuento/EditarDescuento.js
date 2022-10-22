@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from 'react-bootstrap/Modal'; 
 import Form from 'react-bootstrap/Form';
@@ -11,18 +11,18 @@ import Productos from "../FormInputs/Productos";
 import Buttons from "../FormInputs/Buttons";
 import PorcentajeDeDescuento from "../FormInputs/PorcentajeDeDescuento";
 
-import { getCondiones, getProductos, registrarPromocion } from "../../../api";
+import {getCondiones, getProductos} from "../../../api/index";
 
-function Descuento(props){
-    const [formValues, setFormValues] = useState({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:"",valor:"",descuento: ""});
+function EditarDescuento(props){
+    const [formValues, setFormValues] = useState(props.promocion);
     const [condiciones, setCondiciones] = useState([]);
-    const [productos, setProducto] = useState([]);
+    const [productos, setProductos] = useState([]);
     const [productosSeleccionados, setProductosSeleccionados] = useState([]);
     const [validated, setValidated] = useState(false);
 
     useEffect(()=>{
-        setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:"",valor:"",descuento: ""});
-        getCondiones().then(json => setCondiciones(json));
+        const [formValues, setFormValues] = useState(props.promocion);
+        getCondiones().then(setCondiciones(json));
         getProductos().then((json) => {
             if(productos.length === 0){
                 json.forEach((producto)=>{
@@ -34,7 +34,7 @@ function Descuento(props){
         });
 
     },[]);
-    
+
     function handleFormChange(event){
         setValidated(true);
         const name = event.target.name;
@@ -47,24 +47,11 @@ function Descuento(props){
         });
     }
 
-    async function handleSubmit(event){
-        event.preventDefault();
-        if(productosSeleccionados.length === 0){
-            alert("Seleccione al menos un producto");
-        }
-        else{
-            const response = await registrarPromocion({formValues, productosSeleccionados});
-            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
-            setProductosSeleccionados([]);
-            if(response.code != 200){
-                alert("Error, no se pudo registrar la promocion");
-            }
-            else{
-                alert("Promocion registrada");
-                props.handleClose();
-            }
-        }
+    function handleSubmit(){
+
     }
+
+
 
     return (<Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">
     <Modal.Header closeButton>
@@ -102,5 +89,4 @@ function Descuento(props){
     );
 }
 
-
-export default Descuento;
+export default EditarDescuento;

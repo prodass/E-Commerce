@@ -218,4 +218,17 @@ async function registrarPromocion(req,res){
     }
 }
 
-export {getInicio, getTipos, getProductos, getCondiones,getPromociones, getPromocionesById, registrarPromocion}
+function deletePromocionById(req,res){
+    Promocion.deleteOne({_id:req.body.id},function(err){
+        if(err){
+            res.status(500).json({message: err.message});
+        }
+        else{
+            res.status(202).json({message: "Promocion eliminada", code: 202});
+        }
+    });
+}
+
+
+
+export {getInicio, getTipos, getProductos, getCondiones,getPromociones, getPromocionesById, registrarPromocion, deletePromocionById}

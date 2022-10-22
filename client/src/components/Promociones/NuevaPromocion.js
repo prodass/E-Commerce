@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Descuento from "./Descuento/Descuento";
 import Codigo from "./Codigo/Codigo";
 import NxM from "./NXM/NxM";
