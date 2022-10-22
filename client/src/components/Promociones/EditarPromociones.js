@@ -46,6 +46,7 @@ function EditarPromociones(props){
     }
 
     return(
+        <div>
         <Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "lg">
         <Modal.Header closeButton>
           <Modal.Title>Promociones</Modal.Title>
