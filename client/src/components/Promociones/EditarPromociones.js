@@ -22,13 +22,13 @@ function EditarPromociones(props){
     }
 
     return(
-        <Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "xl">
+        <Modal show={props.show} onHide={props.handleClose} centered backdrop="static" keyboard={false} size = "lg">
         <Modal.Header closeButton>
           <Modal.Title>Promociones</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             {promociones.map((promocion)=>{
-                return (<div className="row" key = {promocion._id}>
+                return (<div className="row hola" key = {promocion._id}>
                             <div className="col-lg-11">{promocion.descripcion}</div>
                             <div className="col-lg-1">
                                 <FontAwesomeIcon icon={faPenToSquare} className="icon clickable" onClick={handleEditClick}/>
