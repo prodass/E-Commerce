@@ -48,10 +48,10 @@ function Descuento(props){
             });
         });
         if(props.promocionAEditar.condicion){
-            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: props.promocionAEditar.descripcion, fechaInicio:getDateString(new Date(props.promocionAEditar.fechaInicio)), fechaFin:getDateString(new Date(props.promocionAEditar.fechaFin)),condicion:props.promocionAEditar.condicion.codigo,valor:props.promocionAEditar.valor,descuento: props.promocionAEditar.descuento});
+            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: props.promocionAEditar.descripcion, fechaInicio:getDateString(new Date(props.promocionAEditar.fechaInicio)), fechaFin:getDateString(new Date(props.promocionAEditar.fechaFin)),condicion:props.promocionAEditar.condicion.codigo,valor:props.promocionAEditar.valor,descuento: props.promocionAEditar.descuento.toString()});
         }
         else{
-            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: props.promocionAEditar.descripcion, fechaInicio:getDateString(new Date(props.promocionAEditar.fechaInicio)), fechaFin:getDateString(new Date(props.promocionAEditar.fechaFin)),condicion:"",valor:"",descuento: props.promocionAEditar.descuento});
+            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: props.promocionAEditar.descripcion, fechaInicio:getDateString(new Date(props.promocionAEditar.fechaInicio)), fechaFin:getDateString(new Date(props.promocionAEditar.fechaFin)),condicion:"",valor:"",descuento: props.promocionAEditar.descuento.toString()});
         }
     }
 
@@ -74,7 +74,6 @@ function Descuento(props){
         }
         else{
             if(props.promocionAEditar){
-                /*
                 const response = await updateUnaPromocion(props.promocionAEditar._id,{formValues, productosSeleccionados});
                 setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
                 setProductosSeleccionados([]);
@@ -85,8 +84,6 @@ function Descuento(props){
                     alert("Promocion actualizada");
                     props.handleClose();
                 }
-                */
-               alert("No implementado");
             }
             else{
                 const response = await registrarPromocion({formValues, productosSeleccionados});

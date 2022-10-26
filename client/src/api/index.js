@@ -55,7 +55,7 @@ function deletePromocionById(id){
 function updateUnaPromocion(id, promocion){
     return new Promise((resolve,reject)=>{
         fetch(url + "promociones/" + id,{
-            method: 'PUT',
+            method: 'PATCH',
             body: JSON.stringify({promocion}),
             headers:{
                 'Content-type': 'application/json; charset=UTF-8',

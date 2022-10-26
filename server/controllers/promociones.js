@@ -167,13 +167,8 @@ async function registrarPromocion(req,res){
             res.status(500).json({message: "erro en db"});
         }
         else{
-            Promocion.find((err,foundPromociones)=>{
-                if(err){
-                    res.status(500).json({message: err.message});
-                }
-                else{
                     if(condicionId === 0){
-                        const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
+                        const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                         newPromocion.save((err)=>{
                             if(err){
                                 res.status(500).json({message: err.message});
@@ -191,7 +186,7 @@ async function registrarPromocion(req,res){
                         });
                     }
                     else{   
-                        const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), codigo: foundPromociones.length, descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevaPromocion.formValues.valor});
+                        const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevaPromocion.formValues.valor});
                         newPromocion.save((err)=>{
                             if(err){
                                 res.status(500).json({message: err.message});
@@ -210,9 +205,7 @@ async function registrarPromocion(req,res){
                     }
                     
                 }
-            });
         }
-    }
     else{
         res.status(400).json({message: "Formulario incorrecto"});
     }
@@ -232,47 +225,39 @@ function deletePromocionById(req,res){
 async function updateUnaPromocion(req,res){
     if (await validateForm(req.body.promocion)){
         const productosId = await getIdProductos(req.body.promocion.productosSeleccionados);
+        const tipoId = await getIdTipo(req.body.promocion.formValues.codigoPromocion);
         const condicionId = await getIdCondicion(req.body.promocion.formValues.condicion);
         if(productosId === false || condicionId === false){
             res.status(500).json({message: "erro en db"});
         }
         else{
-            if(condicionId == 0){
-                Promocion.updateOne({_id:req.params.id},{
-                    descripcion: req.body.promocion.formValues.descripcion,
-                    fechaInicio: new Date(req.body.promocion.formValues.fechaInicio),
-                    fechaFin: new Date(req.body.promocion.formValues.fechaFin),
-                    productos: productosId,
-                    descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, '')
-                },{overwrite:true},function(err){
+            if(condicionId === 0){
+                const nuevaPromocion = new Promocion({_id: req.params.id, descripcion: req.body.promocion.formValues.descripcion, fechaInicio: new Date(req.body.promocion.formValues.fechaInicio), fechaFin: new Date(req.body.promocion.formValues.fechaFin), productos: productosId, descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
+                Promocion.updateOne({_id: req.params.id},{$set: nuevaPromocion,$unset:{condicion:1, valor: 1}},(err)=>{
                     if(err){
                         res.status(500).json({message: err.message});
                     }
                     else{
-                        res.status(200).json({message: "Promocion actualizada", code: 200});
+                        res.status(200).json({message: "Promocion editada correctamente", code: 200});
                     }
                 });
             }
             else{
-                Promocion.updateOne({_id:req.params.id},{
-                    descripcion: req.body.promocion.formValues.descripcion,
-                    fechaInicio: new Date(req.body.promocion.formValues.fechaInicio),
-                    fechaFin: new Date(req.body.promocion.formValues.fechaFin),
-                    productos: productosId,
-                    descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''),
-                    condicion : condicionId,
-                    valor: req.body.promocion.formValues.valor
-                },{overwrite:true},function(err){
+                const nuevaPromocion = new Promocion({_id: req.params.id, descripcion: req.body.promocion.formValues.descripcion, fechaInicio: new Date(req.body.promocion.formValues.fechaInicio), fechaFin: new Date(req.body.promocion.formValues.fechaFin), productos: productosId, descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.promocion.formValues.valor});
+                Promocion.updateOne({_id: req.params.id},{$set: nuevaPromocion},(err)=>{
                     if(err){
                         res.status(500).json({message: err.message});
                     }
                     else{
-                        res.status(200).json({message: "Promocion Actualizada", code: 200});
+                        res.status(200).json({message: "Promocion editada correctamente", code: 200});
                     }
                 });
             }
         }
 
+    }
+    else{
+        res.status(400).json({message: "Formulario incorrecto"});
     }
 }
 
