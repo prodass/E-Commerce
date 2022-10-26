@@ -53,16 +53,21 @@ function NxM(props){
             alert("Ingrese un formato de NxM valido");
         }
         else{
-            const response = await registrarPromocion({formValues, productosSeleccionados});
-            setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
-            setProductosSeleccionados([]);
-            if(response.code != 200){
-                alert("Error, no se pudo registrar la promocion");
+            if(props.promocionAEditar){
+                alert("No implementado");
             }
             else{
-                alert("Promocion registrada");
-                props.handleClose();
-            }
+                const response = await registrarPromocion({formValues, productosSeleccionados});
+                setFormValues({codigoPromocion: props.codigoPromocion,descripcion: "", fechaInicio:"", fechaFin:"",condicion:0,valor:"",descuento: ""});
+                setProductosSeleccionados([]);
+                if(response.code != 200){
+                    alert("Error, no se pudo registrar la promocion");
+                }
+                else{
+                    alert("Promocion registrada");
+                    props.handleClose();
+                }
+                }
         }
     }
 

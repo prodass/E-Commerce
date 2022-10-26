@@ -229,6 +229,52 @@ function deletePromocionById(req,res){
     });
 }
 
+async function updateUnaPromocion(req,res){
+    if (await validateForm(req.body.promocion)){
+        const productosId = await getIdProductos(req.body.promocion.productosSeleccionados);
+        const condicionId = await getIdCondicion(req.body.promocion.formValues.condicion);
+        if(productosId === false || condicionId === false){
+            res.status(500).json({message: "erro en db"});
+        }
+        else{
+            if(condicionId == 0){
+                Promocion.updateOne({_id:req.params.id},{
+                    descripcion: req.body.promocion.formValues.descripcion,
+                    fechaInicio: new Date(req.body.promocion.formValues.fechaInicio),
+                    fechaFin: new Date(req.body.promocion.formValues.fechaFin),
+                    productos: productosId,
+                    descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, '')
+                },{overwrite:true},function(err){
+                    if(err){
+                        res.status(500).json({message: err.message});
+                    }
+                    else{
+                        res.status(200).json({message: "Promocion actualizada", code: 200});
+                    }
+                });
+            }
+            else{
+                Promocion.updateOne({_id:req.params.id},{
+                    descripcion: req.body.promocion.formValues.descripcion,
+                    fechaInicio: new Date(req.body.promocion.formValues.fechaInicio),
+                    fechaFin: new Date(req.body.promocion.formValues.fechaFin),
+                    productos: productosId,
+                    descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''),
+                    condicion : condicionId,
+                    valor: req.body.promocion.formValues.valor
+                },{overwrite:true},function(err){
+                    if(err){
+                        res.status(500).json({message: err.message});
+                    }
+                    else{
+                        res.status(200).json({message: "Promocion Actualizada", code: 200});
+                    }
+                });
+            }
+        }
+
+    }
+}
 
 
-export {getInicio, getTipos, getProductos, getCondiones,getPromociones, getPromocionesById, registrarPromocion, deletePromocionById}
+export {getInicio, getTipos, getProductos, getCondiones,getPromociones, getPromocionesById, registrarPromocion, deletePromocionById, updateUnaPromocion}

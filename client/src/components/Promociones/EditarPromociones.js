@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Modal from 'react-bootstrap/Modal'; 
-import EditarDescuento from "./Descuento/EditarDescuento";
+import NuevaPromocion from "./NuevaPromocion"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -12,14 +12,14 @@ import {getPromocionesById, deletePromocionById} from "../../api/index";
 
 function EditarPromociones(props){
     const [promociones, setPromociones] = useState([]);
-    const [showEditarDescuento, setShowEditarDescuento] = useState(false);
     const [promocionAEditar, setPromocionAEditar] = useState({});
-    const handleEditarDesucentoClose = () =>{
-        setShowEditarDescuento(false);
-    }
+    const [showNuevaPromocion, setShowNuevaPromocion] = useState(false);
+    const handleNuevaPromocionClose = () =>{setShowNuevaPromocion(false)}
+
     useEffect(()=>{
         getPromocionesById(props.codigoPromocion).then(json => setPromociones(json));
     },[]);
+
     async function handleDeleteClick(id){
         const response =  await deletePromocionById(id);
         if(response.code != 202){
@@ -31,18 +31,7 @@ function EditarPromociones(props){
     }
     function handleEditClick(promocion){
         setPromocionAEditar(promocion);
-        switch(props.codigoPromocion){
-            case 1:
-                //setShowEditarDescuento(true);
-                alert("no implementado");
-                break;
-            case 2:
-                alert("no implementado");
-                break;
-            case 3:
-                alert("no implementado");
-                break;
-        }
+        setShowNuevaPromocion(true);
     }
 
     return(
@@ -64,7 +53,7 @@ function EditarPromociones(props){
             
         </Modal.Body>
       </Modal>
-      {showEditarDescuento && <EditarDescuento show = {showEditarDescuento} handleClose = {handleEditarDesucentoClose} codigoPromocion = {props.codigoPromocion} promocion = {promocionAEditar}/>}
+      {showNuevaPromocion && <NuevaPromocion handleClose = {handleNuevaPromocionClose} codigoPromocion = {props.codigoPromocion} promocionAEditar = {promocionAEditar}/>}
         </div>
         
     );

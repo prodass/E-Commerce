@@ -52,6 +52,19 @@ function deletePromocionById(id){
     });
 }
 
+function updateUnaPromocion(id, promocion){
+    return new Promise((resolve,reject)=>{
+        fetch(url + "promociones/" + id,{
+            method: 'PUT',
+            body: JSON.stringify({promocion}),
+            headers:{
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+        .then((response)=>response.json())
+        .then((json)=>resolve(json));
+    });
+}
 
 
-export {getTipos,getCondiones,getProductos,getPromocionesById,registrarPromocion, deletePromocionById};
+export {getTipos,getCondiones,getProductos,getPromocionesById,registrarPromocion, deletePromocionById, updateUnaPromocion};
