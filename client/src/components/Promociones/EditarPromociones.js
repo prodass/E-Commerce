@@ -14,7 +14,9 @@ function EditarPromociones(props){
     const [promociones, setPromociones] = useState([]);
     const [promocionAEditar, setPromocionAEditar] = useState({});
     const [showNuevaPromocion, setShowNuevaPromocion] = useState(false);
-    const handleNuevaPromocionClose = () =>{setShowNuevaPromocion(false)}
+    const handleNuevaPromocionClose = () =>{
+        setShowNuevaPromocion(false)
+        props.handleClose()}
 
     useEffect(()=>{
         getPromocionesById(props.codigoPromocion).then(json => setPromociones(json));

@@ -167,7 +167,7 @@ async function registrarPromocion(req,res){
             res.status(500).json({message: "erro en db"});
         }
         else{
-                    if(condicionId === 0){
+                    if(condicionId === 0 && req.body.nuevaPromocion.formValues.codigoPromocion === 1){
                         const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                         newPromocion.save((err)=>{
                             if(err){
@@ -185,7 +185,25 @@ async function registrarPromocion(req,res){
                             }
                         });
                     }
-                    else{   
+                    else if (condicionId === 0 && (req.body.nuevaPromocion.formValues.codigoPromocion === 2 || req.body.nuevaPromocion.formValues.codigoPromocion === 3)){   
+                        const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, valor: req.body.nuevaPromocion.formValues.valor});
+                        newPromocion.save((err)=>{
+                            if(err){
+                                res.status(500).json({message: err.message});
+                            }
+                            else{
+                                Producto.updateMany({_id: newPromocion.productos},{$push:{promociones: newPromocion._id}},(err)=>{
+                                    if(err){
+                                         res.status(500).json({message: err.message});
+                                    }
+                                    else{
+                                        res.status(200).json({message: "Promocion registrada", code: 200});
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else{
                         const newPromocion = new Promocion({_id: new mongoose.Types.ObjectId(), descripcion: req.body.nuevaPromocion.formValues.descripcion, fechaInicio: new Date(req.body.nuevaPromocion.formValues.fechaInicio), fechaFin: new Date(req.body.nuevaPromocion.formValues.fechaFin), productos: productosId, descuento: req.body.nuevaPromocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, condicion : condicionId, valor: req.body.nuevaPromocion.formValues.valor});
                         newPromocion.save((err)=>{
                             if(err){
@@ -231,9 +249,20 @@ async function updateUnaPromocion(req,res){
             res.status(500).json({message: "erro en db"});
         }
         else{
-            if(condicionId === 0){
+            if(condicionId === 0 && req.body.promocion.formValues.codigoPromocion === 1){
                 const nuevaPromocion = new Promocion({_id: req.params.id, descripcion: req.body.promocion.formValues.descripcion, fechaInicio: new Date(req.body.promocion.formValues.fechaInicio), fechaFin: new Date(req.body.promocion.formValues.fechaFin), productos: productosId, descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId});
                 Promocion.updateOne({_id: req.params.id},{$set: nuevaPromocion,$unset:{condicion:1, valor: 1}},(err)=>{
+                    if(err){
+                        res.status(500).json({message: err.message});
+                    }
+                    else{
+                        res.status(200).json({message: "Promocion editada correctamente", code: 200});
+                    }
+                });
+            }
+            else if (condicionId === 0 && (req.body.promocion.formValues.codigoPromocion === 2 || req.body.promocion.formValues.codigoPromocion === 3)){
+                const nuevaPromocion = new Promocion({_id: req.params.id, descripcion: req.body.promocion.formValues.descripcion, fechaInicio: new Date(req.body.promocion.formValues.fechaInicio), fechaFin: new Date(req.body.promocion.formValues.fechaFin), productos: productosId, descuento: req.body.promocion.formValues.descuento.replace(/[^\d.-]/g, ''), tipo: tipoId, valor: req.body.promocion.formValues.valor});
+                Promocion.updateOne({_id: req.params.id},{$set: nuevaPromocion},(err)=>{
                     if(err){
                         res.status(500).json({message: err.message});
                     }
